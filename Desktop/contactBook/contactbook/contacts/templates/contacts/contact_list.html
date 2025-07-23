@@ -1,0 +1,35 @@
+<style>
+    
+</style>
+
+
+<h2>Contact List</h2>
+<a href="{% url 'contact_create' %}">Add New Contact</a>
+
+<table border="1" cellpadding="10" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for contact in contacts %}
+    <tr>
+      <td>{{ contact.name }}</td>
+      <td>{{ contact.phone }}</td>
+      <td>{{ contact.email }}</td>
+      <td>
+        <a href="{% url 'contact_update' contact.pk %}">Edit</a> |
+        <a href="{% url 'contact_delete' contact.pk %}">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4">No contacts found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
