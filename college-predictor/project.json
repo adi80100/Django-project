@@ -1,0 +1,59 @@
+{
+  "name": "college-predictor",
+  "version": "1.0.0",
+  "description": "ML-powered college prediction system for CET/JEE exams",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/college-predictor"
+  },
+  "keywords": [
+    "machine-learning",
+    "college-prediction",
+    "cet",
+    "jee",
+    "education",
+    "fastapi",
+    "react",
+    "scikit-learn"
+  ],
+  "author": "College Predictor Team",
+  "license": "MIT",
+  "architecture": {
+    "backend": {
+      "framework": "FastAPI",
+      "language": "Python 3.8+",
+      "ml_library": "scikit-learn",
+      "dependencies": ["pandas", "numpy", "joblib", "uvicorn"]
+    },
+    "frontend": {
+      "framework": "React 18",
+      "type": "Single Page Application",
+      "styling": "Tailwind CSS",
+      "build": "No build required (CDN)"
+    },
+    "ml_model": {
+      "algorithm": "Random Forest Classifier",
+      "features": ["percentile", "category", "branch", "exam_type", "tier", "fees", "placements"],
+      "target": "admission_probability"
+    }
+  },
+  "deployment": {
+    "local": {
+      "backend_port": 8000,
+      "frontend_port": 3000,
+      "setup_script": "./start.sh"
+    },
+    "docker": {
+      "compose_file": "docker-compose.yml",
+      "services": ["backend", "frontend"]
+    }
+  },
+  "data_sources": {
+    "sample_data": "data/colleges_data.csv",
+    "real_data_sources": [
+      "Maharashtra CET Cell",
+      "JoSAA Counselling",
+      "Individual College Websites"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "college-predictor-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for College Predictor - Single file React app",
+  "main": "index.html",
+  "scripts": {
+    "serve": "python -m http.server 3000",
+    "serve-node": "npx http-server -p 3000",
+    "dev": "python -m http.server 3000"
+  },
+  "keywords": [
+    "college-predictor",
+    "cet",
+    "jee",
+    "react",
+    "education"
+  ],
+  "author": "College Predictor Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {},
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

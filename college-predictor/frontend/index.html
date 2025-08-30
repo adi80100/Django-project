@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Predictor - CET/JEE</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .college-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .college-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .probability-bar {
+            background: linear-gradient(90deg, #f56565 0%, #ffd60a 50%, #48bb78 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const CollegePredictor = () => {
+            // State management
+            const [formData, setFormData] = useState({
+                percentile: '',
+                category: 'General',
+                preferred_branch: 'Computer Science',
+                exam_type: 'CET',
+                max_results: 20
+            });
+
+            const [predictions, setPredictions] = useState([]);
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState('');
+            const [availableOptions, setAvailableOptions] = useState({
+                branches: [],
+                categories: ['General', 'OBC', 'SC', 'ST', 'EWS'],
+                exam_types: ['CET', 'JEE'],
+                states: []
+            });
+
+            const API_BASE_URL = 'http://localhost:8000';
+
+            // Load available options on component mount
+            useEffect(() => {
+                fetchOptions();
+            }, []);
+
+            const fetchOptions = async () => {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/options`);
+                    if (response.ok) {
+                        const options = await response.json();
+                        setAvailableOptions(options);
+                    }
+                } catch (err) {
+                    console.error('Failed to load options:', err);
+                }
+            };
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            };
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                setError('');
+                setPredictions([]);
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/predict`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            percentile: parseFloat(formData.percentile),
+                            category: formData.category,
+                            preferred_branch: formData.preferred_branch,
+                            exam_type: formData.exam_type,
+                            max_results: parseInt(formData.max_results)
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    setPredictions(data.predictions);
+
+                } catch (err) {
+                    setError(`Failed to get predictions: ${err.message}`);
+                    console.error('Prediction error:', err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const getProbabilityColor = (probability) => {
+                if (probability >= 0.8) return 'text-green-600';
+                if (probability >= 0.6) return 'text-yellow-600';
+                if (probability >= 0.4) return 'text-orange-600';
+                return 'text-red-600';
+            };
+
+            const getProbabilityBadge = (probability) => {
+                if (probability >= 0.8) return 'bg-green-100 text-green-800';
+                if (probability >= 0.6) return 'bg-yellow-100 text-yellow-800';
+                if (probability >= 0.4) return 'bg-orange-100 text-orange-800';
+                return 'bg-red-100 text-red-800';
+            };
+
+            const getTierBadge = (tier) => {
+                const colors = {
+                    1: 'bg-purple-100 text-purple-800',
+                    2: 'bg-blue-100 text-blue-800',
+                    3: 'bg-gray-100 text-gray-800'
+                };
+                return colors[tier] || 'bg-gray-100 text-gray-800';
+            };
+
+            return (
+                <div className="min-h-screen gradient-bg">
+                    <div className="container mx-auto px-4 py-8">
+                        {/* Header */}
+                        <div className="text-center mb-8">
+                            <h1 className="text-4xl font-bold text-white mb-2">
+                                🎓 College Predictor
+                            </h1>
+                            <p className="text-xl text-white opacity-90">
+                                Find your best college matches based on CET/JEE percentiles
+                            </p>
+                        </div>
+
+                        {/* Main Content */}
+                        <div className="max-w-6xl mx-auto">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                
+                                {/* Input Form */}
+                                <div className="lg:col-span-1">
+                                    <div className="bg-white rounded-xl p-6 card-shadow">
+                                        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                                            Enter Your Details
+                                        </h2>
+                                        
+                                        <form onSubmit={handleSubmit} className="space-y-4">
+                                            {/* Percentile Input */}
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Percentile Score
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    name="percentile"
+                                                    value={formData.percentile}
+                                                    onChange={handleInputChange}
+                                                    min="0"
+                                                    max="100"
+                                                    step="0.1"
+                                                    required
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                    placeholder="Enter your percentile (0-100)"
+                                                />
+                                            </div>
+
+                                            {/* Category Selection */}
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Category
+                                                </label>
+                                                <select
+                                                    name="category"
+                                                    value={formData.category}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                >
+                                                    {availableOptions.categories.map(category => (
+                                                        <option key={category} value={category}>
+                                                            {category}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            {/* Branch Selection */}
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Preferred Branch
+                                                </label>
+                                                <select
+                                                    name="preferred_branch"
+                                                    value={formData.preferred_branch}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                >
+                                                    {availableOptions.branches.map(branch => (
+                                                        <option key={branch} value={branch}>
+                                                            {branch}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            {/* Exam Type Selection */}
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Exam Type
+                                                </label>
+                                                <select
+                                                    name="exam_type"
+                                                    value={formData.exam_type}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                >
+                                                    {availableOptions.exam_types.map(examType => (
+                                                        <option key={examType} value={examType}>
+                                                            {examType}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            {/* Max Results */}
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                    Max Results
+                                                </label>
+                                                <select
+                                                    name="max_results"
+                                                    value={formData.max_results}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                >
+                                                    <option value={10}>10</option>
+                                                    <option value={20}>20</option>
+                                                    <option value={30}>30</option>
+                                                    <option value={50}>50</option>
+                                                </select>
+                                            </div>
+
+                                            {/* Submit Button */}
+                                            <button
+                                                type="submit"
+                                                disabled={loading || !formData.percentile}
+                                                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                {loading ? (
+                                                    <span className="flex items-center justify-center">
+                                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                        </svg>
+                                                        Predicting...
+                                                    </span>
+                                                ) : (
+                                                    '🔍 Find My Colleges'
+                                                )}
+                                            </button>
+                                        </form>
+
+                                        {/* Error Message */}
+                                        {error && (
+                                            <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                                                <p className="text-sm">{error}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Results Section */}
+                                <div className="lg:col-span-2">
+                                    {predictions.length > 0 && (
+                                        <div className="bg-white rounded-xl p-6 card-shadow">
+                                            <div className="flex items-center justify-between mb-6">
+                                                <h2 className="text-2xl font-semibold text-gray-800">
+                                                    College Predictions
+                                                </h2>
+                                                <div className="text-sm text-gray-600">
+                                                    {predictions.length} colleges found
+                                                </div>
+                                            </div>
+
+                                            {/* Student Info Summary */}
+                                            <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                                                <h3 className="font-semibold text-blue-800 mb-2">Your Profile</h3>
+                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                                    <div>
+                                                        <span className="text-blue-600 font-medium">Percentile:</span>
+                                                        <div className="text-blue-800">{formData.percentile}%</div>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-blue-600 font-medium">Category:</span>
+                                                        <div className="text-blue-800">{formData.category}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-blue-600 font-medium">Branch:</span>
+                                                        <div className="text-blue-800">{formData.preferred_branch}</div>
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-blue-600 font-medium">Exam:</span>
+                                                        <div className="text-blue-800">{formData.exam_type}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* College Cards */}
+                                            <div className="space-y-4 max-h-96 overflow-y-auto">
+                                                {predictions.map((college, index) => (
+                                                    <div key={index} className="college-card border border-gray-200 rounded-lg p-4">
+                                                        <div className="flex items-start justify-between">
+                                                            <div className="flex-1">
+                                                                <div className="flex items-start justify-between mb-2">
+                                                                    <h3 className="text-lg font-semibold text-gray-800 leading-tight">
+                                                                        {college.college_name}
+                                                                    </h3>
+                                                                    <div className="flex space-x-2 ml-4">
+                                                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTierBadge(college.tier)}`}>
+                                                                            Tier {college.tier}
+                                                                        </span>
+                                                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getProbabilityBadge(college.admission_probability)}`}>
+                                                                            {(college.admission_probability * 100).toFixed(1)}%
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-3">
+                                                                    <div>
+                                                                        <span className="font-medium">📍 State:</span>
+                                                                        <div>{college.state}</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="font-medium">💰 Fees:</span>
+                                                                        <div>₹{(college.fees_per_year / 100000).toFixed(1)}L/year</div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="font-medium">📊 Placements:</span>
+                                                                        <div>{college.placement_percentage}%</div>
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Admission Probability Bar */}
+                                                                <div className="mb-2">
+                                                                    <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                                                        <span>Admission Probability</span>
+                                                                        <span className={`font-semibold ${getProbabilityColor(college.admission_probability)}`}>
+                                                                            {(college.admission_probability * 100).toFixed(1)}%
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                                                        <div 
+                                                                            className="probability-bar h-2 rounded-full"
+                                                                            style={{width: `${college.admission_probability * 100}%`}}
+                                                                        ></div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="text-xs text-gray-500">
+                                                                    Cutoff for {formData.category}: {college.cutoff_percentile.toFixed(2)}%
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Empty State */}
+                                    {predictions.length === 0 && !loading && !error && (
+                                        <div className="bg-white rounded-xl p-12 card-shadow text-center">
+                                            <div className="text-6xl mb-4">🎯</div>
+                                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                                                Ready to Find Your Colleges?
+                                            </h3>
+                                            <p className="text-gray-600">
+                                                Enter your details in the form to get personalized college predictions.
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {/* Loading State */}
+                                    {loading && (
+                                        <div className="bg-white rounded-xl p-12 card-shadow text-center">
+                                            <div className="animate-spin text-6xl mb-4">⚙️</div>
+                                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                                                Analyzing Your Options...
+                                            </h3>
+                                            <p className="text-gray-600">
+                                                Our AI is finding the best college matches for you.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="text-center mt-12 text-white opacity-75">
+                            <p className="text-sm">
+                                ⚠️ Predictions are based on historical data and ML models. 
+                                Actual admissions may vary. Always verify with official sources.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Helper functions (moved outside component for performance)
+        const getTierBadge = (tier) => {
+            const colors = {
+                1: 'bg-purple-100 text-purple-800',
+                2: 'bg-blue-100 text-blue-800',
+                3: 'bg-gray-100 text-gray-800'
+            };
+            return colors[tier] || 'bg-gray-100 text-gray-800';
+        };
+
+        const getProbabilityBadge = (probability) => {
+            if (probability >= 0.8) return 'bg-green-100 text-green-800';
+            if (probability >= 0.6) return 'bg-yellow-100 text-yellow-800';
+            if (probability >= 0.4) return 'bg-orange-100 text-orange-800';
+            return 'bg-red-100 text-red-800';
+        };
+
+        const getProbabilityColor = (probability) => {
+            if (probability >= 0.8) return 'text-green-600';
+            if (probability >= 0.6) return 'text-yellow-600';
+            if (probability >= 0.4) return 'text-orange-600';
+            return 'text-red-600';
+        };
+
+        // Render the app
+        ReactDOM.render(<CollegePredictor />, document.getElementById('root'));
+    </script>
+</body>
+</html>

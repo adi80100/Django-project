@@ -1,0 +1,53 @@
+college_name,branch,exam_type,general_cutoff,obc_cutoff,sc_cutoff,st_cutoff,ews_cutoff,state,tier,fees_per_year,placement_percentage
+IIT Bombay,Computer Science,JEE,99.8,99.6,98.2,97.8,99.7,Maharashtra,1,200000,95
+IIT Delhi,Computer Science,JEE,99.7,99.5,98.0,97.5,99.6,Delhi,1,200000,96
+IIT Madras,Computer Science,JEE,99.6,99.4,97.8,97.3,99.5,Tamil Nadu,1,200000,94
+IIT Kanpur,Computer Science,JEE,99.5,99.3,97.6,97.0,99.4,Uttar Pradesh,1,200000,93
+IIT Kharagpur,Computer Science,JEE,99.4,99.2,97.4,96.8,99.3,West Bengal,1,200000,92
+VJTI Mumbai,Computer Science,CET,98.5,97.8,95.2,94.5,98.2,Maharashtra,2,150000,88
+COEP Pune,Computer Science,CET,98.2,97.5,94.8,94.0,97.9,Maharashtra,2,140000,86
+Government College of Engineering Pune,Computer Science,CET,97.8,97.0,94.2,93.5,97.5,Maharashtra,2,120000,84
+Walchand College of Engineering,Computer Science,CET,96.5,95.8,92.5,91.8,96.2,Maharashtra,2,180000,82
+BITS Pilani,Computer Science,JEE,98.8,98.5,96.8,96.2,98.6,Rajasthan,1,450000,91
+NIT Trichy,Computer Science,JEE,98.2,97.8,95.5,94.8,98.0,Tamil Nadu,1,180000,89
+NIT Warangal,Computer Science,JEE,98.0,97.6,95.2,94.5,97.8,Telangana,1,180000,88
+NIT Surathkal,Computer Science,JEE,97.8,97.4,94.8,94.2,97.6,Karnataka,1,180000,87
+IIT Bombay,Electrical Engineering,JEE,98.8,98.5,96.5,95.8,98.6,Maharashtra,1,200000,90
+IIT Delhi,Electrical Engineering,JEE,98.6,98.3,96.2,95.5,98.4,Delhi,1,200000,91
+IIT Madras,Electrical Engineering,JEE,98.4,98.1,95.8,95.2,98.2,Tamil Nadu,1,200000,89
+VJTI Mumbai,Electrical Engineering,CET,96.8,96.0,92.5,91.8,96.5,Maharashtra,2,150000,82
+COEP Pune,Electrical Engineering,CET,96.5,95.7,92.0,91.3,96.2,Maharashtra,2,140000,80
+IIT Bombay,Mechanical Engineering,JEE,97.5,97.2,94.8,94.2,97.3,Maharashtra,1,200000,85
+IIT Delhi,Mechanical Engineering,JEE,97.3,97.0,94.5,93.8,97.1,Delhi,1,200000,86
+IIT Madras,Mechanical Engineering,JEE,97.1,96.8,94.2,93.5,96.9,Tamil Nadu,1,200000,84
+VJTI Mumbai,Mechanical Engineering,CET,95.2,94.5,90.8,90.2,94.9,Maharashtra,2,150000,78
+COEP Pune,Mechanical Engineering,CET,94.8,94.2,90.2,89.8,94.6,Maharashtra,2,140000,76
+IIT Bombay,Civil Engineering,JEE,95.8,95.5,92.2,91.8,95.6,Maharashtra,1,200000,75
+IIT Delhi,Civil Engineering,JEE,95.6,95.3,91.8,91.5,95.4,Delhi,1,200000,76
+VJTI Mumbai,Civil Engineering,CET,93.5,92.8,88.5,87.8,93.2,Maharashtra,2,150000,70
+COEP Pune,Civil Engineering,CET,93.2,92.5,88.0,87.5,92.9,Maharashtra,2,140000,68
+Pune Institute of Computer Technology,Computer Science,CET,95.8,95.0,91.2,90.5,95.5,Maharashtra,2,200000,83
+Maharashtra Institute of Technology,Computer Science,CET,94.5,93.8,89.8,89.2,94.2,Maharashtra,2,250000,79
+Sardar Patel Institute of Technology,Computer Science,CET,93.8,93.0,88.5,87.8,93.5,Maharashtra,2,220000,77
+K.J. Somaiya College of Engineering,Computer Science,CET,93.2,92.5,87.8,87.2,92.9,Maharashtra,2,300000,75
+D.J. Sanghvi College of Engineering,Computer Science,CET,92.8,92.0,87.2,86.8,92.5,Maharashtra,2,280000,74
+Vellore Institute of Technology,Computer Science,JEE,94.2,93.5,89.2,88.5,93.9,Tamil Nadu,2,350000,81
+SRM Institute of Science and Technology,Computer Science,JEE,92.5,91.8,86.8,86.2,92.2,Tamil Nadu,2,320000,76
+Manipal Institute of Technology,Computer Science,JEE,91.8,91.2,85.8,85.2,91.5,Karnataka,2,400000,74
+Birla Institute of Technology Mesra,Computer Science,JEE,90.5,89.8,84.2,83.8,90.2,Jharkhand,2,380000,72
+Thapar Institute of Engineering,Computer Science,JEE,89.8,89.2,83.5,82.8,89.5,Punjab,2,420000,70
+Anna University,Computer Science,CET,91.2,90.5,85.2,84.8,90.9,Tamil Nadu,2,100000,73
+PSG College of Technology,Computer Science,CET,90.8,90.2,84.8,84.2,90.5,Tamil Nadu,2,180000,71
+Thiagarajar College of Engineering,Computer Science,CET,89.5,88.8,83.2,82.8,89.2,Tamil Nadu,2,160000,69
+BMS College of Engineering,Computer Science,CET,88.8,88.2,82.5,81.8,88.5,Karnataka,2,200000,67
+RV College of Engineering,Computer Science,CET,88.2,87.5,81.8,81.2,87.9,Karnataka,2,220000,66
+Delhi Technological University,Computer Science,JEE,96.8,96.2,93.2,92.8,96.5,Delhi,1,150000,87
+Netaji Subhas University of Technology,Computer Science,JEE,95.5,94.8,91.5,90.8,95.2,Delhi,2,120000,84
+Indira Gandhi Delhi Technical University,Computer Science,JEE,94.2,93.5,89.8,89.2,93.9,Delhi,2,100000,81
+Jamia Millia Islamia,Computer Science,JEE,93.8,93.2,88.5,87.8,93.5,Delhi,2,80000,78
+Guru Gobind Singh Indraprastha University,Computer Science,CET,92.5,91.8,86.8,86.2,92.2,Delhi,2,150000,75
+Jadavpur University,Computer Science,JEE,96.2,95.8,92.5,91.8,95.9,West Bengal,1,50000,85
+Heritage Institute of Technology,Computer Science,JEE,89.5,88.8,83.8,83.2,89.2,West Bengal,2,250000,68
+Kalyani Government Engineering College,Computer Science,CET,87.8,87.2,81.5,80.8,87.5,West Bengal,2,60000,65
+Institute of Engineering and Management,Computer Science,CET,86.5,85.8,79.8,79.2,86.2,West Bengal,2,180000,62
+Techno India University,Computer Science,CET,85.2,84.5,78.2,77.8,84.9,West Bengal,3,220000,58
